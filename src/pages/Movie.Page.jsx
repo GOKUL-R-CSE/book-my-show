@@ -1,11 +1,50 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MovieHero from "../components/MovieHero/MovieHero.Component";
 import Slider from "react-slick";
 import { FaCcVisa, FaCcApplePay } from "react-icons/fa";
 import Cast from "../components/Cast/Cast.Component";
 import PosterSlider from "../components/PosterSlider/PosterSlider.Component";
 
+import { MovieContext } from "../context/Movie.Context";
+
+import axios from 'axios';
+import { useParams } from "react-router";
+
 const MoviePage = () => {
+
+    const { movie } = useContext(MovieContext);
+    const { id } = useParams();
+    const [cast, setCast] = useState([]);
+    const [similarMovies, setSimilarMovies] = useState([]);
+    const [recommended, setRecommended] = useState([]);
+
+    useEffect(() => {
+        const requestCast = async () => {
+            const getCast = await axios.get(`/movie/${id}/credits`);
+            setCast(getCast.data.cast);
+
+        }
+        requestCast();
+    }, [id]);
+
+    useEffect(() => {
+        const requestSimilarMovies = async () => {
+            const getSimilarMovies = await axios.get(`/movie/${id}/similar`);
+            setSimilarMovies(getSimilarMovies.data.results);
+
+        }
+        requestSimilarMovies();
+    }, [id]);
+
+    useEffect(() => {
+        const requestRecommended = async () => {
+            const getRecommended = await axios.get(`/movie/${id}/recommendations`);
+            setRecommended(getRecommended.data.results);
+
+        }
+        requestRecommended();
+    }, [id]);
+
     const settingsCast = {
         infinite: false,
         speed: 500,
@@ -72,117 +111,9 @@ const MoviePage = () => {
         ],
     };
 
-    const cast = [
-        {
-            profile_path:
-                "https://media.vanityfair.com/photos/5f6e0d388f3d1388648ddf94/4:3/w_1779,h_1334,c_limit/vin.jpg",
-            original_name: "Vin Diesel",
-            character: "Dominic Toretto",
-        },
-        {
-            profile_path:
-                "https://in.bmscdn.com/iedb/artist/images/website/poster/large/john-cena-1021-24-03-2017-15-43-30.jpg",
-            original_name: "John Cena",
-            character: "Jackob Toretto",
-        },
-        {
-            profile_path:
-                "https://in.bmscdn.com/iedb/artist/images/website/poster/large/tyrese-gibson-2671-24-03-2017-17-39-25.jpg",
-            original_name: "Tyrese Gibson",
-            character: "Roman Pearce",
-        },
-        {
-            profile_path:
-                "https://in.bmscdn.com/iedb/artist/images/website/poster/large/charlize-theron-410-21-05-2019-04-42-50.jpg",
-            original_name: "Charlize Theron",
-            character: "Cipher",
-        },
-        {
-            profile_path:
-                "https://in.bmscdn.com/iedb/artist/images/website/poster/large/nathalie-emmanuel-1055032-24-03-2017-16-16-15.jpg",
-            original_name: "Nathalie Emmanuel",
-            character: "Ramsey",
-        },
-        {
-            profile_path:
-                "https://in.bmscdn.com/iedb/artist/images/website/poster/large/helen-mirren-808-24-03-2017-12-36-16.jpg",
-            original_name: "Helen Mirren",
-            character: "Magdalene Shaw",
-        },
-        {
-            profile_path:
-                "https://in.bmscdn.com/iedb/artist/images/website/poster/large/michelle-rodriguez-1471-13-10-2017-03-57-20.jpg",
-            original_name: "Michelle Rodriguez",
-            character: "Letty Ortiz",
-        },
-    ];
 
-    const similarMovies = [
-        {
-            src: "https://in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:oi-discovery-catalog@@icons@@heart_202006300400.png,ox-24,oy-617,ow-29:ote-ODQlICAxayB2b3Rlcw%3D%3D,ots-29,otc-FFFFFF,oy-612,ox-70/et00056556-zbbswydmwv-portrait.jpg",
-            title: "Fast and Furious 9",
-            subtitle: "Action / Adventure / Crime / Thriller",
-        },
-        {
-            src: "https://in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:oi-discovery-catalog@@icons@@heart_202006300400.png,ox-24,oy-617,ow-29:ote-OTElICAxOGsgdm90ZXM%3D,ots-29,otc-FFFFFF,oy-612,ox-70/et00122566-rhfsjjrlrc-portrait.jpg",
-            title: "Shang-Chi and the Legend of the Ten Rings",
-            subtitle: "Action / Adventure / Fantasy",
-        },
-        {
-            src: "https://in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:oi-discovery-catalog@@icons@@heart_202006300400.png,ox-24,oy-617,ow-29:ote-NzglICA4ayB2b3Rlcw%3D%3D,ots-29,otc-FFFFFF,oy-612,ox-70/et00309402-zcusbgfzak-portrait.jpg",
-            title: "The Sucide Squad",
-            subtitle: "Action / Adventure / Comedy / SciFi"
-        },
-        {
-            src: "https://in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:oi-discovery-catalog@@icons@@heart_202006300400.png,ox-24,oy-617,ow-29:ote-NzAlICA4ayB2b3Rlcw%3D%3D,ots-29,otc-FFFFFF,oy-612,ox-70/et00122455-djhnmgmtvw-portrait.jpg",
-            title: "The Conjuring: The Devil made Me Do It",
-            subtitle: "Horror / Thriller"
-        },
-        {
-            src: "https://in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:oi-discovery-catalog@@icons@@heart_202006300400.png,ox-24,oy-617,ow-29:ote-NzklICAyM2sgdm90ZXM%3D,ots-29,otc-FFFFFF,oy-612,ox-70/et00117102-gukaentnqs-portrait.jpg",
-            title: "Bell Bottom",
-            subtitle: "Action / Thriller",
-        },
-        {
-            src: "https://in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:oi-discovery-catalog@@icons@@heart_202006300400.png,ox-24,oy-617,ow-29:ote-OTMlICA3ayB2b3Rlcw%3D%3D,ots-29,otc-FFFFFF,oy-612,ox-70/et00127662-lbqutjnxvj-portrait.jpg",
-            title: "Chal Mera Putt 2",
-            subtitle: "Comedy / Drama",
-        },
 
-    ];
-    const bmsExclusive = [
-        {
-            src: "https://in.bmscdn.com/iedb/movies/images/website/poster/large/faactory-et00313885-31-08-2021-03-50-13.jpg",
-            title: "Faactory",
-            subtitle: "Action / Adventure / Crime / Thriller",
-        },
-        {
-            src: "https://in.bmscdn.com/iedb/movies/images/website/poster/large/laabam-et00137405-25-08-2020-11-51-17.jpg",
-            title: "Laabam",
-            subtitle: "Action / Adventure / Fantasy",
-        },
-        {
-            src: "https://in.bmscdn.com/iedb/movies/images/website/poster/large/chehre-et00102880-25-08-2021-07-26-46.jpg",
-            title: "Chere",
-            subtitle: "Action / Adventure / Comedy / SciFi"
-        },
-        {
-            src: "https://in.bmscdn.com/discovery-catalog/events/tr:w-400,h-600,bg-CCCCCC:w-400.0,h-660.0,cm-pad_resize,bg-000000,fo-top:oi-discovery-catalog@@icons@@heart_202006300400.png,ox-24,oy-617,ow-29:ote-NzAlICA4ayB2b3Rlcw%3D%3D,ots-29,otc-FFFFFF,oy-612,ox-70/et00122455-djhnmgmtvw-portrait.jpg",
-            title: "The Conjuring: The Devil made Me Do It",
-            subtitle: "Horror / Thriller"
-        },
-        {
-            src: "https://in.bmscdn.com/iedb/movies/images/website/poster/large/ucha-pind-et00314226-25-08-2021-03-54-07.jpg",
-            title: "Ucha Pind",
-            subtitle: "Action / Thriller",
-        },
-        {
-            src: "https://in.bmscdn.com/iedb/movies/images/website/poster/large/the-green-knight-et00311404-06-08-2021-02-20-29.jpg",
-            title: "The Green Knight",
-            subtitle: "Comedy / Drama",
-        },
 
-    ];
 
     return (
         <>
@@ -193,10 +124,7 @@ const MoviePage = () => {
                         About the movie
                     </h1>
                     <p>
-                        Dom`s peaceful life with his wife Letty and son Brian is
-                        shattered when Dom`s past catches up to him. The gang is
-                        up against the most skilled assassin and
-                        high-performance driver - his little brother Jakob
+                        {movie.overview}
                     </p>
                 </div>
 
@@ -280,7 +208,7 @@ const MoviePage = () => {
                     <PosterSlider
                         config={settings}
                         title="BMS XCLUSIVE"
-                        posters={bmsExclusive}
+                        posters={recommended}
                         isDark={false}
                     />
                 </div>

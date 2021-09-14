@@ -13,7 +13,7 @@ function HomePage() {
         const requestPopularMovies = async () => {
             const getPopularMovies = await axios.get("/movie/popular");
             setRecommendedMovies(getPopularMovies.data.results);
-            console.log(getPopularMovies);
+
         };
 
         requestPopularMovies();
